@@ -1,17 +1,9 @@
-import mongoose from 'mongoose'
-import supertest from 'supertest'
-import { app, server } from '../src/app'
 import { User } from '../src/models/User'
-import { initialUsers, newUser } from './helper'
-
-const api = supertest(app)
+import { addUsersToMongo, api, closeConnections, newUser } from './helper'
 
 beforeEach(async () => {
   await User.deleteMany({})
-  for (const user of initialUsers) {
-    const userObject = new User(user)
-    await userObject.save()
-  }
+  await addUsersToMongo()
 })
 
 describe('/add-users', () => {
@@ -19,7 +11,7 @@ describe('/add-users', () => {
     await api.post('/users/add-user').send(newUser).expect(201).expect('Content-Type', /json/)
   })
 
-  test('A user creation should return {id, username, notes []}', async () => {
+  test('A user creation should return {id, username, notes []} as response', async () => {
     const response = await api.post('/users/add-user').send(newUser)
     const { id, username, notes } = response.body
     expect(id).not.toBeNull()
@@ -29,7 +21,13 @@ describe('/add-users', () => {
   })
 })
 
-afterAll(() => {
-  mongoose.connection.close()
-  server.close()
+describe('/get-users', () => {
+  test('should return 200 and list of 2 users', async () => {
+    const response = await api.get('/users/get-users').expect(200)
+    expect(response.body.length).toBe(2)
+  })
+})
+
+afterAll(async () => {
+  await closeConnections()
 })

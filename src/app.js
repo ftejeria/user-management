@@ -1,17 +1,20 @@
 import express, { json } from 'express'
 import { connectDb } from './db/db.js'
+import { noteRouter } from './routes/noteRoutes.js'
 import { userRouter } from './routes/userRoutes.js'
 
 const app = express()
+const PORT = process.env.PORT
 
 connectDb()
 
 app.use(json())
 
 app.use('/users', userRouter)
+app.use('/notes', noteRouter)
 
-const server = app.listen(process.env.PORT, () => {
-  console.log('Server on port 3000')
+const server = app.listen(PORT, () => {
+  console.log(`Server on port ${PORT}`)
 })
 
 export { app, server }
