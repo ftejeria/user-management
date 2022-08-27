@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 // Everything in Mongoose starts with a Schema(the structure of a particular document).
 // Each schema maps to a MongoDB collection and defines the shape of the documents within that collection.
 const userSchema = new mongoose.Schema({
+  name: String,
   username: String,
   passwordHash: String,
   notes: [{

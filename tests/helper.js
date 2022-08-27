@@ -25,15 +25,18 @@ export const addNotesToMongo = async () => {
 }
 
 export const initialUsers = [{
+  name: 'name 1',
   username: 'user_test_1',
   password: '123456'
 },
 {
+  name: 'name 2',
   username: 'user_test_2',
   password: '123456'
 }]
 
 export const newUser = {
+  name: 'new name ',
   username: 'user_test_3',
   password: '123456'
 }

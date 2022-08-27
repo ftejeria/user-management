@@ -1,8 +1,8 @@
 POST http://localhost:3000/notes/add-note HTTP/1.1
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzMGE0MGMyNWY5M2FjYzEzMThjYTczYSIsInVzZXJuYW1lIjoicGlwZVVzZXIxIiwiaWF0IjoxNjYxNjMxNjIwLCJleHAiOjE2NjE2MzUyMjB9.DMHAGsR5kr43iQHfHXPTbSv1YV3F8EDe71Y_OO366l4
 
 {
   "content": "prod content 1",
-  "important": true ,
-  "userId":"630823972f1a6874d207d58e"
+  "important": true 
 }
