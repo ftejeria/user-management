@@ -22,4 +22,4 @@ userSchema.set('toJSON', {
 })
 
 // Model, interface for interacting with the database
-export const User = mongoose.model('user', userSchema)
+export const User = mongoose.model('User', userSchema)

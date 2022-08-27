@@ -49,5 +49,6 @@ export const initialNotes = [{
 
 export const newNote = {
   content: 'new note content',
-  important: true
+  important: true,
+  userId: ''
 }
