@@ -1,10 +1,7 @@
-import { Note } from '../src/models/Note'
-import { User } from '../src/models/User'
-import { addNotesToMongo, addUsersToMongo, api, closeConnections, newNote, initialUsers, firstUser, authTestUser } from './helper'
+
+import { addNotesToMongo, addUsersToMongo, api, closeConnections, newNote, authTestUser } from './helper'
 
 beforeEach(async () => {
-  await User.deleteMany({})
-  await Note.deleteMany({})
   await addUsersToMongo()
   await addNotesToMongo()
 })

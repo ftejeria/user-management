@@ -20,6 +20,7 @@ export const authTestUser = async () => {
 }
 
 export const addUsersToMongo = async () => {
+  await User.deleteMany({})
   for (const user of initialUsers) {
     const { name, username, password } = user
     const passwordHash = await bcrypt.hash(password, 10)
@@ -28,6 +29,7 @@ export const addUsersToMongo = async () => {
   }
 }
 export const addNotesToMongo = async () => {
+  await Note.deleteMany({})
   for (const note of initialNotes) {
     const noteObject = new Note(note)
     await noteObject.save()
