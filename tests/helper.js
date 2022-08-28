@@ -3,6 +3,7 @@ import supertest from 'supertest'
 import { app, server } from '../src/app'
 import { Note } from '../src/models/Note'
 import { User } from '../src/models/User'
+import bcrypt from 'bcrypt'
 
 export const api = supertest(app)
 
@@ -11,9 +12,18 @@ export const closeConnections = async () => {
   server.close()
 }
 
+export const authTestUser = async () => {
+  const { username, password } = initialUsers[0]
+  const loginResponse = await api.post('/login/').send({ username, password })
+  const { token } = loginResponse.body
+  return token
+}
+
 export const addUsersToMongo = async () => {
   for (const user of initialUsers) {
-    const userObject = new User(user)
+    const { name, username, password } = user
+    const passwordHash = await bcrypt.hash(password, 10)
+    const userObject = new User({ name, username, passwordHash })
     await userObject.save()
   }
 }
@@ -52,6 +62,5 @@ export const initialNotes = [{
 
 export const newNote = {
   content: 'new note content',
-  important: true,
-  userId: ''
+  important: true
 }

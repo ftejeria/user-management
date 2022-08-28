@@ -3,6 +3,7 @@ import { User } from '../models/User.js'
 import { Note } from '../models/Note.js'
 
 export const addNote = async (req, res) => {
+  // Get from middleware userAuth
   const { userId } = req
   const { content, important } = req.body
 

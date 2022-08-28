@@ -1,24 +1,32 @@
 import { Note } from '../src/models/Note'
 import { User } from '../src/models/User'
-import { addNotesToMongo, api, closeConnections, newNote } from './helper'
+import { addNotesToMongo, addUsersToMongo, api, closeConnections, newNote, initialUsers, firstUser, authTestUser } from './helper'
 
 beforeEach(async () => {
+  await User.deleteMany({})
   await Note.deleteMany({})
+  await addUsersToMongo()
   await addNotesToMongo()
 })
 
 describe('/add-note', () => {
+  test('An auth user should be able to create a note, return 201 and Content-type json', async () => {
+    const token = await authTestUser()
+    await api.post('/notes/add-note').send(newNote).set({ Authorization: `Bearer ${token}` }).expect(201).expect('Content-Type', /json/)
+  })
+
   test('note creation should return {content,important}', async () => {
-    const firstUser = await User.findOne({})
-    newNote.userId = firstUser._id
-    const response = await api.post('/notes/add-note').send(newNote)
-    const { content, important, user } = response.body
+    const token = await authTestUser()
+    const response = await api.post('/notes/add-note').send(newNote).set({ Authorization: `Bearer ${token}` })
+    const { content, important } = response.body
     expect(content).toBe(newNote.content)
     expect(important).toBe(newNote.important)
-    expect(user).toBe(firstUser.id)
   })
-  test('note creation should return 201 and Content-type json', async () => {
-    await api.post('/notes/add-note').send(newNote).expect(201).expect('Content-Type', /json/)
+
+  test('An unAuth user should not be able to create a note', async () => {
+    const response = await api.post('/notes/add-note').send(newNote).set({ Authorization: 'Bearer 1234' }).expect(401).expect('Content-Type', /json/)
+    const { error } = response.body
+    expect(error).toBe('Invalid token')
   })
 })
 
